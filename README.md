@@ -1,3 +1,7 @@
+https://github.com/EmpireMediaScience/A1111-Web-UI-Installer のランチャー部分を日本語化しました。
+Stable Diffusion WebUIは日本語化されません。
+Stable Diffusion WebUI本体を日本語化する場合は、 https://github.com/Katsuyuki-Karasawa/stable-diffusion-webui-localization-ja_JP を確認して下さい。
+
 A1111 WebUI Easy Installer and Launcher
 ========================
 
