@@ -1,0 +1,50 @@
+[
+  {
+    "name": "自動更新をWebUI",
+    "arg": "git-UI",
+    "Description": "起動時にWebUIの更新",
+    "type": "git"
+  },
+  {
+    "name": "拡張機能を自動更新",
+    "arg": "git-Ext",
+    "Description": "起動時に拡張機能の更新",
+    "type": "git"
+  },
+  {
+    "name": "生成物全てを消去",
+    "arg": "git-ClearOutputs",
+    "Description": "起動時に生成された画像を全て消去",
+    "type": "git"
+  },
+  {
+    "name": "低VRAMで起動出来る様に (medvram)",
+    "arg": "medvram",
+    "Description": "低VRAM（8G未満）のカードが動作するようにする",
+    "type": "arg"
+  },
+  {
+    "name": "Xformersを有効化",
+    "arg": "xformers",
+    "Description": "殆どのグラフィックカードに対応する素晴らしいスピードアップ機能",
+    "type": "arg"
+  },
+  {
+    "name": "チェックポイントフォルダー",
+    "arg": "ckpt-dir",
+    "Description": "(オプション) .ckptファイルが保存されている場所",
+    "type": "path"
+  },
+  {
+    "name": "既定のVAEファイル指定",
+    "arg": "vae-path",
+    "Description": "(オプション) 使用したいVAEファイル",
+    "type": "path"
+  },
+  {
+    "name": "追加引数",
+    "arg": "add",
+    "Description": "(オプション) 追加引数",
+    "type": "string"
+  }
+]
