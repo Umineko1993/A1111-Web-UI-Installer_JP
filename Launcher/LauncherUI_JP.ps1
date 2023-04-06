@@ -37,7 +37,7 @@ Import-BaseModel
 $Hash = Get-WebUICommitHash
 $HashText = "ハッシュが見つかりません"
 if ($Hash) {
-    $HashText = "$($Hash.Substring(0, 7))..."
+    $HashText = "$($Hash.Substring(0, 7))"
 }
 
 Function MakeNewForm {
@@ -58,10 +58,10 @@ function Invoke-WebUI {
         if ($setting.arg -ilike "git*" -And $setting.enabled -eq $true) {
             switch ($setting.arg) {
                 "git-Ext" { 
-                    Update-Extensions $true 
+                    Update-Extensions $true
                 }
                 "git-UI" { 
-                    Update-WebUI $true 
+                    Update-WebUI $true
                 }
                 "git-ClearOutputs" {
                     Clear-Outputs
@@ -74,8 +74,8 @@ function Invoke-WebUI {
     # Parsing args from settings
     $arguments = Convert-SettingsToArguments $settings
 
-    logger.pop "emsランチャー経由で起動するwebuiは、このウィンドウを終了すると停止します。"
-    logger.warn "コミットハッシュの後に発生するエラー : XXXX'はランチャーとは関係ありません。. 代わりにAutomatic1111のgithubで報告して下さい:"
+    logger.pop "emsランチャー経由で起動するwebuiは、このウィンドウを終了すると停止します"
+    logger.warn "コミットハッシュの後に発生するエラー : XXXX'はランチャーとは関係ありません。代わりにAutomatic1111のgithubで報告して下さい:"
     logger.web -type "web" "https://github.com/AUTOMATIC1111/stable-diffusion-webui/issues/new/choose"
     logger.space "Yellow"
     
@@ -262,7 +262,7 @@ function Makeform {
 
     $ArgParams = foreach ($def in $defs) {
         $setting = $settings | Where-Object { $_.arg -eq $def.arg }
-        if ($def.type -ne "git" -and $def.type -ne "string") {        
+        if ($def.type -ne "git" -and $def.type -ne "string") {
             if ($def.type -eq "path") {
                 $UIparam = New-Object System.Windows.Forms.Button
                 $UIparam.BackColor = $buttonColor
@@ -292,10 +292,10 @@ function Makeform {
             $paramDesc.Name = $def.arg
             if ($setting.value) {
                 if ($setting.value.Length -lt 25) {
-                    $paramDesc.Text = "リセット - $($setting.value)" 
+                    $paramDesc.Text = "リセット - $($setting.value)"
                 }
                 else {
-                    $paramDesc.Text = "リセット - $($setting.value.Substring(0, 25))..."  
+                    $paramDesc.Text = "リセット - $($setting.value.Substring(0, 25))"
                 }
                 
                 $paramDesc.Add_Click({ Reset-Path $this })
@@ -306,10 +306,10 @@ function Makeform {
 
             $ArgContainer.Controls.Add($UIparam)
             if ($def.type -eq "git") { 
-                $ArgContainer.Controls.Add($forceBTN) 
+                $ArgContainer.Controls.Add($forceBTN)
             }
             $ArgContainer.Controls.Add($paramDesc)
-            $UIparam        
+            $UIparam
         }
     }
 
@@ -317,7 +317,7 @@ function Makeform {
     $addDesc.LinkColor = $accentColor
     $addDesc.LinkBehavior = [System.Windows.Forms.LinkBehavior]::NeverUnderline;
     $addDesc.Text = "ランチャーの追加設定 (?)"
-    $addDesc.TextAlign = "MiddleCenter" 
+    $addDesc.TextAlign = "MiddleCenter"
     $addDesc.Dock = "Bottom"
     $addDesc.Size = "200, 20"
     $addDesc.Add_Click({ Start-Process "https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/Command-Line-Arguments-and-Settings" })
@@ -418,9 +418,9 @@ function Makeform {
     $HashLabel.TextAlign = "MiddleCenter"
     $HashLabel.LinkColor = $secondaryColor
     $HashLabel.LinkBehavior = [System.Windows.Forms.LinkBehavior]::NeverUnderline;
-    $HashLabel.Add_Click({ 
+    $HashLabel.Add_Click({
             Set-Clipboard $Hash
-            logger.info $Hash, "クリップボードにコピー" 
+            logger.info $Hash, "クリップボードにコピー"
         })
     $HashLabel.Dock = "Bottom"
     $HWContainer.Controls.Add($HashLabel)
@@ -450,6 +450,6 @@ function Makeform {
     $Form.ShowDialog()
 }
 
-logger.pop "読み込み完了, ランチャーを起動します"
+logger.pop "読み込み完了しました。ランチャーを起動します"
 
 MakeForm

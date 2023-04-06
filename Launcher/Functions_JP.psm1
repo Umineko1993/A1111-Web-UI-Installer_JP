@@ -13,8 +13,8 @@ function Search-RegForPyPath {
             $pyVersion = (Get-Command -Name "$pyPath\python.exe").Version
             logger.info "レジストリに Python $pyVersion が見つかりました：" "$pyPath"
             if ($pyVersion -notlike "3.10.6150.1013") {
-                $Exprompt = [system.windows.messagebox]::Show("Python 3.10 ($pyVersion)を以前にインストールしましたが、正しいバージョンではありません。 エラーにつながる可能性があります。`n`n解決するには、システムからPython 3.10の全てのバージョンをアンインストールし、ランチャーを再起動して下さい。`n`n続けますか?", "Python $pyVersionは推奨されません。", 'Yes No')
-                logger.warn "これはPythonの推奨バージョンではないので、おそらくエラーが発生します。"
+                $Exprompt = [system.windows.messagebox]::Show("Python 3.10 ($pyVersion)を以前にインストールしましたが、正しいバージョンではありません。 エラーにつながる可能性があります。`n`n解決するには、システムからPython 3.10の全てのバージョンをアンインストールし、ランチャーを再起動して下さい。`n`n続けますか?", "Python $pyVersionは推奨されません", 'Yes No')
+                logger.warn "これはPythonの推奨バージョンではないので、おそらくエラーが発生します"
                 if ($Exprompt -eq "No") {
                     exit
                 }
@@ -75,7 +75,7 @@ function Install-WebUI {
         logger.success "完了"
         return
     }
-    logger.info "Automatic1111 SD WebUIが見つかりました。:" "$webuiPath"
+    logger.info "Automatic1111 SD WebUIが見つかりました:" "$webuiPath"
 }
 function Reset-WebUI {
     $Exprompt = [system.windows.messagebox]::Show("これは、WebUIフォルダを完全に消去し、githubから再作成するもので、全ての重要なデータとモデルをバックアップしている事を確認して下さい。`n`n 本当にWebUIフォルダをリセットしたいですか?", '気をつけてください', 'Yes No', '警告')
@@ -89,7 +89,7 @@ function Reset-WebUI {
 function Import-BaseModel {
     $ckptDirSetting = $settings | Where-Object { $_.arg -eq "ckpt-dir" }
     if (($ckptDirSetting.enabled -eq $false) -and !(Get-ChildItem $modelsPath | Where-Object { $_.extension -ne ".txt" })) {
-        $Exprompt = [system.windows.messagebox]::Show("あなたのインストール先にモデルが見つかりませんでした。Stable Diffusion 1.5 ベースモデルをダウンロードしますか？`n`n詳細が分からない場合「Yes」のクリック推奨します。`n`nこれはしばらく時間がかかるので、暫くお待ち下さい。", 'SD 1.5モデルをインストールしますか？', 'Yes No')
+        $Exprompt = [system.windows.messagebox]::Show("あなたのインストール先にモデルが見つかりませんでした。Stable Diffusion 1.5 ベースモデルをダウンロードしますか？`n`n詳細が分からない場合「Yes」のクリック推奨します。`n`nこれはしばらく時間がかかるので、暫くお待ち下さい。", 'SD 1.5モデルをインストールしますか?', 'Yes No')
         if ($Exprompt -eq "Yes") {
             $url = "https://anga.tv/ems/model.ckpt"
             $destination = "$modelsPath\SD15NewVAEpruned.ckpt"
@@ -104,11 +104,11 @@ function Import-BaseModel {
             } -ArgumentList $url, $destination | Out-Null
 
             while (!(Test-Path $destination)) {
-                logger.info "ファイル作成待ち..."
+                logger.info "ファイル作成待ち"
                 Start-Sleep -Seconds 1
             }
             $timePassed = 0.1
-            while ((Get-Item $destination).Length -lt $fileSize) {              
+            while ((Get-Item $destination).Length -lt $fileSize) {
                 $downloadSize = (Get-Item $destination).Length
                 $ratio = [Math]::Ceiling($downloadSize / $fileSize * 100)
                 $dlRate = $ratio / $timePassed
@@ -175,11 +175,11 @@ function Write-Settings($settings) {
     $settings | ConvertTo-Json -Depth 100 | Out-File $settingsPath
     logger.success
 }
-function New-Settings ($oldsettings) {   
+function New-Settings ($oldsettings) {
     $defs = Import-Defs
     $newSettings = @()
-    foreach ($def in $defs) { 
-        $newSettings += @{ 
+    foreach ($def in $defs) {
+        $newSettings += @{
             arg     = $def.arg
             enabled = $false
             value   = "" 
@@ -198,7 +198,7 @@ function New-Settings ($oldsettings) {
     Write-Settings $newSettings
     return $newSettings
 }
-function Restore-Settings {    
+function Restore-Settings {
     $oldsettings = ""
     if (Test-Path $settingsPath) {
         $settingsfile = Get-Content $settingsPath
@@ -206,7 +206,7 @@ function Restore-Settings {
         $oldsettings = $settingsfile | ConvertFrom-Json
     }
     else {
-        logger.info "設定ファイルが見つかりません, 作成中"
+        logger.info "設定ファイルが見つかりません。作成中"
     }
     $settings = New-Settings $oldsettings
     return $settings
@@ -303,13 +303,13 @@ function Select-Folder ([string]$InitialDirectory) {
         
     if ($folder) { return $folder.Self.Path } else { return '' }
 }
-function Select-File([string]$InitialDirectory) { 
+function Select-File([string]$InitialDirectory) {
     $dialog = New-Object System.Windows.Forms.OpenFileDialog
     $dialog.InitialDirectory = $webuiPath
     $dialog.Title = "ファイルを選択して下さい"
     If ($dialog.ShowDialog() -eq "キャンセル") {
         return ''
-    }   
+    }
     return $dialog.FileName 
 }
 
@@ -329,7 +329,7 @@ function Update-Extensions ($enabled) {
         Set-Location $extPath
         $exts = Get-ChildItem $extPath -Directory
         if ($exts) {
-            foreach ($ext in $exts) {         
+            foreach ($ext in $exts) {
                 logger.web -Type "更新" -Object "拡張機能の更新中: $ext"
                 Set-Location $ext.Fullname
                 git pull origin 
@@ -341,11 +341,11 @@ function Update-Extensions ($enabled) {
     }
 }
 function Clear-Outputs {
-    $Exprompt = [system.windows.messagebox]::Show("以前に生成した画像は全て削除されますが、宜しいですか？`n`n今回は画像を削除しない場合は、「No」をクリックして下さい。`n`nこの機能を無効にするには、ランチャーの「生成された画像を消去する」のチェックを外して下さい。", '警告', 'Yes No', '警告')
+    $Exprompt = [system.windows.messagebox]::Show("以前に生成した画像は全て削除されますが、宜しいですか？`n`n今回は画像を削除しない場合は、「No」をクリックして下さい。`n`nこの機能を無効にするには、ランチャーの「生成された画像を消去する」のチェックを外して下さい", '警告', 'Yes No', '警告')
     if ($Exprompt -eq "Yes") {
         logger.action "出力ディレクトリの全出力を削除中"
         if ($webuiConfig -ne "" -and $webUIConfig.outdir_samples -ne "") {
-            logger.info "$($webUIConfig.outdir_samples)にあるカスタム出力ディレクトリを検索します。"
+            logger.info "$($webUIConfig.outdir_samples)にあるカスタム出力ディレクトリを検索します"
             Get-ChildItem $webUIConfig.outdir_samples -Force -Recurse -File | Where-Object { $_.Extension -eq ".png" -or $_.Extension -eq ".jpg" } | Remove-Item -Force
         }
         else {
