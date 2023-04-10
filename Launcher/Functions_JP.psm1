@@ -13,7 +13,7 @@ function Search-RegForPyPath {
             $pyVersion = (Get-Command -Name "$pyPath\python.exe").Version
             logger.info "レジストリに Python $pyVersion が見つかりました：" "$pyPath"
             if ($pyVersion -notlike "3.10.6150.1013") {
-                $Exprompt = [system.windows.messagebox]::Show("Python 3.10 ($pyVersion)を以前にインストールしましたが、正しいバージョンではありません。 エラーにつながる可能性があります。`n`n解決するには、システムからPython 3.10の全てのバージョンをアンインストールし、ランチャーを再起動して下さい。`n`n続けますか?", "Python $pyVersionは推奨されません。", 'Yes No')
+                $Exprompt = [system.windows.messagebox]::Show("Python 3.10 ($pyVersion)を以前にインストールしましたが、正しいバージョンではありません。 エラーにつながる可能性があります。`n`n解決するには、システムからPython 3.10の全てのバージョンをアンインストールし、ランチャーを再起動して下さい。`n`n続けますか?", "Python $pyVersionは推奨されません。", 'YesNo')
                 logger.warn "これはPythonの推奨バージョンではないので、おそらくエラーが発生します。"
                 if ($Exprompt -eq "No") {
                     exit
@@ -78,7 +78,7 @@ function Install-WebUI {
     logger.info "Automatic1111 SD WebUIが見つかりました。:" "$webuiPath"
 }
 function Reset-WebUI {
-    $Exprompt = [system.windows.messagebox]::Show("これは、WebUIフォルダを完全に消去し、githubから再作成するもので、全ての重要なデータとモデルをバックアップしている事を確認して下さい。`n`n 本当にWebUIフォルダをリセットしたいですか?", '気をつけてください', 'Yes No', '警告')
+    $Exprompt = [system.windows.messagebox]::Show("これは、WebUIフォルダを完全に消去し、githubから再作成するもので、全ての重要なデータとモデルをバックアップしている事を確認して下さい。`n`n 本当にWebUIフォルダをリセットしたいですか?", '気をつけてください', 'YesNo', 'Warning')
     if ($Exprompt -eq "Yes") {
         logger.action "Webuiフォルダの削除" -success
         Remove-Item $webuiPath -Recurse -Force
@@ -89,7 +89,7 @@ function Reset-WebUI {
 function Import-BaseModel {
     $ckptDirSetting = $settings | Where-Object { $_.arg -eq "ckpt-dir" }
     if (($ckptDirSetting.enabled -eq $false) -and !(Get-ChildItem $modelsPath | Where-Object { $_.extension -ne ".txt" })) {
-        $Exprompt = [system.windows.messagebox]::Show("あなたのインストール先にモデルが見つかりませんでした。Stable Diffusion 1.5 ベースモデルをダウンロードしますか？`n`n詳細が分からない場合「Yes」のクリック推奨します。`n`nこれはしばらく時間がかかるので、暫くお待ち下さい。", 'SD 1.5モデルをインストールしますか？', 'Yes No')
+        $Exprompt = [system.windows.messagebox]::Show("あなたのインストール先にモデルが見つかりませんでした。Stable Diffusion 1.5 ベースモデルをダウンロードしますか？`n`n詳細が分からない場合「Yes」のクリック推奨します。`n`nこれはしばらく時間がかかるので、暫くお待ち下さい。", 'SD 1.5モデルをインストールしますか？', 'YesNo')
         if ($Exprompt -eq "Yes") {
             $url = "https://anga.tv/ems/model.ckpt"
             $destination = "$modelsPath\SD15NewVAEpruned.ckpt"
@@ -341,7 +341,7 @@ function Update-Extensions ($enabled) {
     }
 }
 function Clear-Outputs {
-    $Exprompt = [system.windows.messagebox]::Show("以前に生成した画像は全て削除されますが、宜しいですか？`n`n今回は画像を削除しない場合は、「No」をクリックして下さい。`n`nこの機能を無効にするには、ランチャーの「生成された画像を消去する」のチェックを外して下さい。", '警告', 'Yes No', '警告')
+    $Exprompt = [system.windows.messagebox]::Show("以前に生成した画像は全て削除されますが、宜しいですか？`n`n今回は画像を削除しない場合は、「No」をクリックして下さい。`n`nこの機能を無効にするには、ランチャーの「生成された画像を消去する」のチェックを外して下さい。", '警告', 'YesNo', 'Warning')
     if ($Exprompt -eq "Yes") {
         logger.action "出力ディレクトリの全出力を削除中"
         if ($webuiConfig -ne "" -and $webUIConfig.outdir_samples -ne "") {
